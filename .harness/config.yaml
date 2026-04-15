@@ -1,0 +1,99 @@
+# Harness Engineering Configuration
+# 이 파일은 프로젝트의 하네스 설정을 정의합니다.
+# 프로젝트에 맞게 빈 값("")을 채워주세요.
+
+harness:
+  version: "1.0"
+
+# ─────────────────────────────────────
+# 프로젝트 기본 정보
+# ─────────────────────────────────────
+project:
+  name: ""              # 프로젝트명 (예: "my-backend", "admin-web")
+  language: ""          # python | java | kotlin | typescript | go | rust
+  framework: ""         # fastapi | spring | react | next | express | gin | actix
+  build_tool: ""        # make | gradle | npm | yarn | pnpm | cargo | uv
+
+# ─────────────────────────────────────
+# 아키텍처 설정
+# ─────────────────────────────────────
+architecture:
+  style: ""
+  # 아키텍처 스타일을 선택하세요:
+  #   layered    — 전통적 계층 구조 (Controller → Service → Repository)
+  #   hexagonal  — 포트 & 어댑터 (도메인 중심, DDD)
+  #   clean      — 유스케이스 중심 (엉클 밥 클린 아키텍처)
+  #   modular    — 기능 모듈 단위 분리
+
+# ─────────────────────────────────────
+# 프로젝트 네이티브 도구 매핑
+# ─────────────────────────────────────
+# 프로젝트에서 사용하는 린트/테스트/포맷 명령어를 기입하세요.
+# 에이전트가 체크리스트 실행 시 이 명령어를 사용합니다.
+enforcement:
+  lint_command: ""
+  # 예시:
+  #   Python:     "uv run flake8 ." | "ruff check ."
+  #   Java:       "gradle check" | "mvn checkstyle:check"
+  #   TypeScript: "npm run lint" | "pnpm lint"
+  #   Go:         "golangci-lint run"
+  #   Rust:       "cargo clippy"
+
+  test_command: ""
+  # 예시:
+  #   Python:     "uv run pytest" | "pytest"
+  #   Java:       "gradle test" | "mvn test"
+  #   TypeScript: "npm test" | "pnpm test"
+  #   Go:         "go test ./..."
+  #   Rust:       "cargo test"
+
+  type_check_command: ""
+  # 예시:
+  #   Python:     "mypy ." | "pyright"
+  #   Java:       "" (컴파일러가 수행)
+  #   TypeScript: "tsc --noEmit"
+  #   Go:         "" (컴파일러가 수행)
+  #   Rust:       "" (컴파일러가 수행)
+
+  format_command: ""
+  # 예시:
+  #   Python:     "black ." | "ruff format ."
+  #   Java:       "gradle spotlessApply" | "mvn spotless:apply"
+  #   TypeScript: "prettier --write ." | "npm run format"
+  #   Go:         "gofmt -w ."
+  #   Rust:       "cargo fmt"
+
+# ─────────────────────────────────────
+# 아키텍처 강제 도구 (언어별)
+# ─────────────────────────────────────
+# 아키텍처 의존성 방향을 기계적으로 검증하는 도구를 설정하세요.
+# 도입 초기에는 비워두고, Phase 3에서 설정해도 됩니다.
+arch_enforcement:
+  tool: ""
+  # 언어별 추천 도구:
+  #   Python:     "import-linter" | "custom flake8 plugin"
+  #   Java:       "ArchUnit"
+  #   TypeScript: "dependency-cruiser" | "eslint-plugin-import"
+  #   Go:         "go vet + custom analyzer"
+  #   Rust:       "cargo clippy + mod 구조"
+  config_path: ""
+  # 도구의 설정 파일 경로 (예: ".importlinter", "archunit.json")
+
+# ─────────────────────────────────────
+# 품질 관리
+# ─────────────────────────────────────
+quality:
+  score_doc: "docs/quality/score.md"
+  review_cycle: "weekly"
+  # 품질 스코어 갱신 주기:
+  #   daily   — 매일 (빠른 이터레이션 프로젝트)
+  #   weekly  — 매주 (일반적)
+  #   sprint  — 스프린트 단위
+
+# ─────────────────────────────────────
+# 체크리스트
+# ─────────────────────────────────────
+checklists:
+  pre_commit: ".harness/checklists/pre-commit.md"
+  pre_pr: ".harness/checklists/pre-pr.md"
+  new_module: ".harness/checklists/new-module.md"
