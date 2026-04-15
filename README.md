@@ -88,6 +88,28 @@ git checkout harness/main -- docs/ .harness/ CLAUDE.md ARCHITECTURE.md
 에이전트가 `CLAUDE.md`를 읽으면 파이프라인을 발견하고 자동으로 단계를 따릅니다.
 상세 내용은 `.harness/pipeline/README.md`를 참조하세요.
 
+### 듀얼 리뷰 (Claude + Codex)
+
+Step 4(리뷰) 단계에서는 두 가지 관점의 리뷰를 수행합니다:
+
+| Pass | 리뷰어 | 초점 | 필수 여부 |
+|------|--------|------|----------|
+| Pass 1 | **Claude 자체 리뷰** | 규칙 준수, 패턴 일관성, 비즈니스 로직 정합성 | 항상 실행 |
+| Pass 2 | **Codex 리뷰** | 로직 결함, 보안 취약점, 성능, 코드 품질 | 플러그인 설치 시 |
+
+두 리뷰 결과를 통합하여 종합 판정(PASS/FAIL)을 내립니다.
+
+#### Codex 플러그인 설치
+
+Codex 리뷰를 사용하려면 Claude Code용 Codex 플러그인이 필요합니다:
+
+```bash
+claude plugin add https://github.com/openai/codex-plugin-cc
+```
+
+- GitHub: [https://github.com/openai/codex-plugin-cc](https://github.com/openai/codex-plugin-cc)
+- Codex 플러그인이 없는 환경에서는 Pass 1(Claude 자체 리뷰)만 실행됩니다
+
 ### PPT/PPTX 기획서 지원
 
 파이프라인은 PPT 기획서를 PDF로 자동 변환하여 분석할 수 있습니다.
