@@ -1,0 +1,106 @@
+# Development Pipeline Definition
+# 에이전트는 이 파일을 읽고 파이프라인 단계, 게이트 조건, 복잡도 라우팅을 파악합니다.
+
+pipeline:
+  name: "Development Pipeline"
+  version: "1.0"
+
+  # 산출물 저장 경로
+  deliverables_dir: "docs/plans/active/{task-id}"
+  completed_dir: "docs/plans/completed/{task-id}"
+
+  # 태스크 ID 형식
+  task_id_format: "{YYYYMMDD}-{short-description}"
+
+  steps:
+    - id: analyze
+      name: "Step 1: 분석"
+      instructions: ".harness/pipeline/steps/01-analyze.md"
+      deliverable: "01-analysis.md"
+      preconditions: []
+      gate:
+        - "01-analysis.md가 태스크 폴더에 존재"
+        - "복잡도 판정 완료: simple | complex | high-risk"
+        - "영향 파일 식별 완료"
+      auto_proceed: true
+
+    - id: plan
+      name: "Step 2: 계획"
+      instructions: ".harness/pipeline/steps/02-plan.md"
+      deliverable: "02-plan.md"
+      preconditions:
+        - "01-analysis.md 존재 및 완성"
+      gate:
+        - "02-plan.md가 태스크 폴더에 존재"
+        - "사용자가 계획을 승인 (Status: APPROVED 마커)"
+        - "선행 수동 작업이 모두 완료"
+      auto_proceed: false  # 사용자 승인 필수
+
+    - id: develop
+      name: "Step 3: 개발"
+      instructions: ".harness/pipeline/steps/03-develop.md"
+      deliverable: null  # 코드 변경
+      preconditions:
+        - "02-plan.md 존재 및 승인됨"
+        - "02-plan.md의 선행 수동 작업이 모두 체크됨"
+      gate:
+        - "계획된 파일이 모두 생성/수정됨"
+        - "빌드 통과"
+      auto_proceed: true
+
+    - id: review
+      name: "Step 4: 리뷰"
+      instructions: ".harness/pipeline/steps/04-review.md"
+      deliverable: "03-review.md"
+      preconditions:
+        - "Step 3 완료 (코드 변경 존재)"
+      gate:
+        - "03-review.md 존재"
+        - "CRITICAL/HIGH 이슈 모두 해소"
+        - "리뷰 판정: PASS"
+      auto_proceed: true
+      max_rounds: 3
+
+    - id: verify
+      name: "Step 5: 검증"
+      instructions: ".harness/pipeline/steps/05-verify.md"
+      deliverable: "04-verify.md"
+      preconditions:
+        - "Step 4 통과 (또는 단순 복잡도로 스킵)"
+      gate:
+        - "04-verify.md 존재"
+        - "빌드 통과"
+        - "영향 범위 교차 확인 완료"
+      auto_proceed: true
+
+    - id: complete
+      name: "Step 6: 완료"
+      instructions: ".harness/pipeline/steps/06-complete.md"
+      deliverable: "05-summary.md"
+      preconditions:
+        - "Step 5 통과"
+      gate:
+        - "사용자가 변경 사항 승인"
+      auto_proceed: false  # 사용자 승인 필수
+
+  # ─────────────────────────────────────
+  # 복잡도 라우팅
+  # ─────────────────────────────────────
+  complexity:
+    simple:
+      description: "단일 파일 또는 경미한 변경, DB 변경 없음"
+      plan_depth: "brief"
+      review: "optional"
+
+    complex:
+      description: "다중 파일, DB 변경, 모듈 간 연동"
+      plan_depth: "detailed"
+      review: "required"
+
+    high-risk:
+      description: "금액/정산, 보안/인증, 외부 연동, 프레임워크 인접"
+      plan_depth: "detailed + rollback plan"
+      review: "required"
+      extra_gates:
+        - "롤백 계획 문서화"
+        - "사용자가 영향 분석 확인"

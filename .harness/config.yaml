@@ -91,6 +91,16 @@ quality:
   #   sprint  — 스프린트 단위
 
 # ─────────────────────────────────────
+# 파이프라인
+# ─────────────────────────────────────
+pipeline:
+  enabled: true
+  definition: ".harness/pipeline/pipeline.yaml"
+  rules: ".harness/pipeline/rules.md"
+  deliverables_dir: "docs/plans/active"
+  completed_dir: "docs/plans/completed"
+
+# ─────────────────────────────────────
 # 체크리스트
 # ─────────────────────────────────────
 checklists:

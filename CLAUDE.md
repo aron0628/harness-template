@@ -27,6 +27,7 @@
 | `docs/plans/active/` | 현재 진행 중인 실행 계획 |
 | `docs/quality/score.md` | 도메인별 품질 등급 |
 | `.harness/config.yaml` | 하네스 설정 |
+| `.harness/pipeline/README.md` | 개발 파이프라인 — 작업 시 따라야 할 단계별 프로세스 |
 
 ## Quick Start
 
@@ -45,6 +46,7 @@
 1. 
 2. 
 3. 
+4. **개발 파이프라인 준수** — 기능 개발/수정 작업 시 `.harness/pipeline/README.md`의 파이프라인을 따른다. 단계를 건너뛰지 않는다.
 
 ## Subdirectories
 
