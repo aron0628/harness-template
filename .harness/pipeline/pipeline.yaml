@@ -72,6 +72,18 @@ pipeline:
         - "리뷰 판정: PASS"
       auto_proceed: true
       max_rounds: 3
+      reviewers:
+        - id: claude
+          name: "Claude 자체 리뷰"
+          type: "self"
+          focus: "규칙 준수, 패턴 일관성, 비즈니스 로직 정합성"
+          required: true   # 항상 실행
+        - id: codex
+          name: "Codex 리뷰"
+          type: "codex"
+          focus: "로직 결함, 보안 취약점, 성능, 코드 품질"
+          required: false  # Codex 플러그인 설치 시 실행
+          # 설치: https://github.com/openai/codex-plugin-cc
 
     - id: verify
       name: "Step 5: 검증"
