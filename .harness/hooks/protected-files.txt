@@ -1,0 +1,8 @@
+# 수정 금지 파일/경로 목록
+# 한 줄에 하나씩, 경로 패턴으로 매칭
+# 프로젝트에 맞게 커스터마이징하세요
+
+# 예시:
+# core/framework/
+# shared/config/
+# public/vendor/

@@ -1,0 +1,31 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .harness/hooks/check-protected-files.sh",
+            "description": "보호 파일 수정 차단"
+          },
+          {
+            "type": "command",
+            "command": "bash .harness/hooks/check-pipeline.sh",
+            "description": "파이프라인 진행 상태 체크"
+          },
+          {
+            "type": "command",
+            "command": "bash .harness/hooks/check-review-gate.sh",
+            "description": "리뷰/검증 게이트 체크"
+          },
+          {
+            "type": "command",
+            "command": "bash .harness/hooks/check-step-gate.sh",
+            "description": "스텝 간 산출물 체인 게이트"
+          }
+        ]
+      }
+    ]
+  }
+}
