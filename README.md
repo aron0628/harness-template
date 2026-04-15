@@ -77,6 +77,55 @@ git checkout harness/main -- docs/ .harness/ CLAUDE.md ARCHITECTURE.md
 3. `docs/quality/drift-log.md` — 드리프트 기록 및 해결
 4. 문서 신선도 모니터링
 
+## 개발 파이프라인
+
+이 템플릿에는 6단계 개발 파이프라인이 내장되어 있습니다:
+
+```
+분석 → 계획 → 개발 → 리뷰 → 검증 → 완료
+```
+
+에이전트가 `CLAUDE.md`를 읽으면 파이프라인을 발견하고 자동으로 단계를 따릅니다.
+상세 내용은 `.harness/pipeline/README.md`를 참조하세요.
+
+### PPT/PPTX 기획서 지원
+
+파이프라인은 PPT 기획서를 PDF로 자동 변환하여 분석할 수 있습니다.
+이 기능을 사용하려면 **LibreOffice**가 필요합니다.
+
+#### LibreOffice란?
+
+오픈소스 오피스 스위트로, PowerPoint/Word/Excel 파일을 CLI에서 변환할 수 있습니다.
+파이프라인에서는 `--headless` 모드(GUI 없이)로 PPT -> PDF 변환에만 사용합니다.
+
+#### 설치 방법
+
+| OS | 명령어 |
+|----|--------|
+| macOS | `brew install --cask libreoffice` |
+| Ubuntu/Debian | `sudo apt install libreoffice` |
+| RHEL/CentOS | `sudo yum install libreoffice` |
+| Windows | [공식 사이트](https://www.libreoffice.org/download/) 에서 다운로드 |
+
+#### 설치 확인
+
+```bash
+soffice --version
+# LibreOffice 25.x.x ...
+```
+
+#### 사용 예시
+
+```bash
+# PPT -> PDF 변환
+soffice --headless --convert-to pdf --outdir ./output/ input.pptx
+
+# 특정 디렉토리에 변환
+soffice --headless --convert-to pdf --outdir docs/plans/active/20260415-rent0501/input/ /path/to/기획서.pptx
+```
+
+> LibreOffice가 설치되지 않은 경우, PPT를 수동으로 PDF로 내보내기하여 `input/` 디렉토리에 넣으면 됩니다.
+
 ## 디렉토리 구조
 
 ```
@@ -104,10 +153,22 @@ project-root/
 │   └── references/                  # 외부 참조
 └── .harness/                        # 하네스 설정
     ├── config.yaml
-    └── checklists/
-        ├── pre-commit.md
-        ├── pre-pr.md
-        └── new-module.md
+    ├── checklists/
+    │   ├── pre-commit.md
+    │   ├── pre-pr.md
+    │   └── new-module.md
+    └── pipeline/                    # 개발 파이프라인
+        ├── README.md                # 파이프라인 개요
+        ├── pipeline.yaml            # 스텝/게이트/복잡도 정의
+        ├── rules.md                 # 개발 규칙 (프로젝트별 커스터마이징)
+        ├── context-chain.template.md
+        └── steps/
+            ├── 01-analyze.md
+            ├── 02-plan.md
+            ├── 03-develop.md
+            ├── 04-review.md
+            ├── 05-verify.md
+            └── 06-complete.md
 ```
 
 ## 모든 템플릿에는 가이드가 포함되어 있습니다
