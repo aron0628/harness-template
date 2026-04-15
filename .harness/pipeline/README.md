@@ -35,9 +35,32 @@
 docs/plans/active/{YYYYMMDD}-{간단한-설명}/
 ```
 
-### 2. 입력 문서 작성
+### 2. 입력 문서 준비
 
-태스크 폴더에 `00-input.md`를 생성하고 원본 요구사항을 기록합니다.
+태스크 폴더에 `input/` 디렉토리와 `00-input.md`를 생성합니다.
+
+```
+docs/plans/active/{task-id}/
+├── 00-input.md      # 요구사항 기록 + 입력 파일 목록
+└── input/           # 기획서, 참고자료 등 분석 대상 파일
+```
+
+**입력 파일 처리 규칙:**
+
+| 원본 형식 | 처리 | 결과 |
+|----------|------|------|
+| PDF | `input/`에 복사 | 그대로 분석 |
+| PPT/PPTX | LibreOffice로 PDF 변환 후 `input/`에 저장 | 변환된 PDF로 분석 |
+| 이미지 (PNG/JPG) | `input/`에 복사 | 그대로 분석 |
+| 기타 문서 | `input/`에 복사 | 가능한 형식으로 분석 |
+
+**PPT 변환 명령:**
+```bash
+soffice --headless --convert-to pdf --outdir {task-folder}/input/ {원본.pptx}
+```
+
+**특정 페이지만 분석할 경우:**
+`00-input.md`에 페이지 범위를 명시합니다. (예: "기획서.pdf 12-15페이지 참조")
 
 ### 3. 컨텍스트 체인 초기화
 

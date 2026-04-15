@@ -12,6 +12,18 @@ pipeline:
   # 태스크 ID 형식
   task_id_format: "{YYYYMMDD}-{short-description}"
 
+  # 입력 문서 디렉토리 (기획서, 참고자료 등)
+  # 태스크 폴더 내에 input/ 디렉토리를 생성하여 분석 대상 파일을 관리
+  input_dir: "docs/plans/active/{task-id}/input"
+
+  # 파일 변환 설정
+  conversion:
+    ppt_to_pdf:
+      enabled: true
+      command: "soffice --headless --convert-to pdf --outdir {output_dir} {input_file}"
+      # LibreOffice 필요: brew install --cask libreoffice (macOS)
+      #                    apt install libreoffice (Linux)
+
   steps:
     - id: analyze
       name: "Step 1: 분석"

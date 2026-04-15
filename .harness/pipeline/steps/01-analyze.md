@@ -8,20 +8,55 @@
 ## 선행 조건
 
 - [ ] 태스크 폴더가 `docs/plans/active/{task-id}/`에 생성됨
+- [ ] `input/` 디렉토리에 분석 대상 파일이 준비됨
 - [ ] `00-input.md`에 원본 요구사항이 기록됨
 - [ ] `context-chain.md`가 초기화됨
 
+## 입력 파일 준비
+
+분석 대상 파일(기획서, 참고자료 등)을 태스크 폴더의 `input/` 디렉토리에 모읍니다.
+
+### 파일 수집 규칙
+
+| 상황 | 처리 |
+|------|------|
+| 다른 경로의 PDF | `input/`에 복사 |
+| PPT/PPTX 파일 | PDF로 변환 후 `input/`에 저장 |
+| 이미지 파일 | `input/`에 복사 |
+
+### PPT -> PDF 변환
+
+```bash
+soffice --headless --convert-to pdf --outdir {task-folder}/input/ {원본.pptx}
+```
+
+> LibreOffice 필요. 설치: `brew install --cask libreoffice` (macOS) / `apt install libreoffice` (Linux)
+
+### 특정 페이지 분석
+
+PDF의 특정 페이지만 분석할 경우 `00-input.md`에 페이지 범위를 명시합니다:
+```
+분석 대상: input/기획서.pdf (12-15페이지)
+```
+
 ## 입력
 
+- 입력 파일 (`input/` 디렉토리)
 - 원본 요구사항 (`00-input.md`)
 - 프로젝트 아키텍처 (`ARCHITECTURE.md`)
 - 개발 규칙 (`.harness/pipeline/rules.md`)
 
 ## 지침
 
+### 0. 입력 파일 수집
+
+- 사용자가 제공한 파일 경로를 확인
+- PDF는 `input/`에 복사, PPT/PPTX는 변환 후 `input/`에 저장
+- `00-input.md`에 수집된 파일 목록과 분석 대상 페이지 기록
+
 ### 1. 요구사항 추출
 
-- 입력 문서에서 핵심 요구사항을 식별
+- `input/` 디렉토리의 기획서를 읽고 핵심 요구사항을 식별
 - 필수(must-have)와 선택(nice-to-have) 구분
 - 불명확한 부분이 있으면 사용자에게 질문
 
